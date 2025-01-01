@@ -147,3 +147,24 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+tools = [
+  {
+    "type": "function",
+    "function": {
+      "name": "get_object_history",  # Replace with the actual function name
+      "description": "Retrieves the task history of a given object to find out where the object is now.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "object_name": {
+            "type": "string",
+            "description": "The name of the object to retrieve history for."
+          }
+        },
+        "required": ["object_name"]
+      }
+    }
+  }
+]
