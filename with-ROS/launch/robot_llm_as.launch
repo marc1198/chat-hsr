@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="robot_llm" pkg="robot_llm" type="action_client_openai.py" output="screen"/>
+</launch>
