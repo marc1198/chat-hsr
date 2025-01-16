@@ -4,10 +4,10 @@ import re
 import pathlib
 
 
-folder = pathlib.Path(_file_).parent.resolve()
+folder = pathlib.Path(__file__).parent.resolve()
 # NOTE: ollama must be running for this to work, start the ollama docker container
 ollama_ip = "localhost"
-model = 'llama3.1:latest'  # TODO: update this for the model you wish to use
+model = 'qwen2.5:32b'  # TODO: update this for the model you wish to use
 # Best: qwen2.5:32b & gemma2:27b
 # Old but good: llama3.1:latest
 
@@ -22,7 +22,7 @@ ollama_ip = "localhost"
 
 #API chat completion call
 def chat(messages):
-    stream = False
+    stream = True
 
     r = requests.post(
         f"http://{ollama_ip}:11434/api/chat",
@@ -70,10 +70,15 @@ def object_detection(object_remove):
 
 # Extract JSON response from LLM output
 def extract_json(text):
-    json_pattern = r'({.*?})'
-    match = re.search(json_pattern, text)
+    json_pattern = r'(\{.*?\})'
+    match = re.search(json_pattern, text, re.DOTALL)
     if match:
-        return match.group(1)
+        json_string = match.group(1)
+        try:
+            return json.loads(json_string)
+        except json.JSONDecodeError:
+            print("Failed to decode JSON from the response.")
+            return None
     return None
     
 # Initialize messages with few-shot examples
@@ -150,7 +155,7 @@ def main():
             json_string = extract_json(feedback["content"])
             
             if json_string:
-                results = json.loads(json_string)
+                results = json_string
 
                 # Check the structure of the JSON response
                 if isinstance(results, dict) and ('object' in results or 'objects' in results) and 'task' in results:
@@ -175,12 +180,10 @@ def main():
 
                     print("\n")
                 else:
-                    print("Invalid structure in the JSON response. Continuing conversation.")
-            else:
-                print("The LLM response did not contain valid JSON. Please try again.")
+                    print("\n Invalid structure in the JSON response. Continuing conversation.")
 
         except json.JSONDecodeError:
             print("Error decoding JSON. Please try again.")
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     main()

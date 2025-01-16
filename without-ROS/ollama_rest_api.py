@@ -95,10 +95,15 @@ def object_detection(object_remove):
 
 # Extract JSON response from LLM output
 def extract_json(text):
-    json_pattern = r'({.*?})'
-    match = re.search(json_pattern, text)
+    json_pattern = r'(\{.*?\})'
+    match = re.search(json_pattern, text, re.DOTALL)
     if match:
-        return match.group(1)
+        json_string = match.group(1)
+        try:
+            return json.loads(json_string)
+        except json.JSONDecodeError:
+            print("Failed to decode JSON from the response.")
+            return None
     return None
 
 def update_object_history(object_name, task):
@@ -199,7 +204,7 @@ def main():
             json_string = extract_json(feedback["content"])
             
             if json_string:
-                results = json.loads(json_string)
+                results = json_string
 
                 # Check the structure of the JSON response
                 if isinstance(results, dict) and ('object' in results or 'objects' in results) and 'task' in results:
