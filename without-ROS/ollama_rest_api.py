@@ -7,7 +7,7 @@ import pathlib
 folder = pathlib.Path(__file__).parent.resolve()
 # NOTE: ollama must be running for this to work, start the ollama docker container
 ollama_ip = "localhost"
-model = 'qwen2.5:32b'  # TODO: update this for the model you wish to use
+model = 'qwen2.5:14b'  # TODO: update this for the model you wish to use
 # Best: qwen2.5:32b & gemma2:27b
 # Old but good: llama3.1:latest
 
@@ -43,9 +43,7 @@ tools = [
 ]
 
 #API chat completion call
-def chat(messages):
-    stream = True
-
+def chat(messages, stream = True):
     r = requests.post(
         f"http://{ollama_ip}:11434/api/chat",
         json={"model": model, "messages": messages, "stream": stream, "temperature": 0.0},
@@ -129,6 +127,13 @@ def get_object_history(object_name: str) -> list:
       return object_history[key]
   return ["No history available."]
 
+
+def save_message_history(messages, file_path="/home/glockerm/sd_upscale/ollama/scripts/my_agents/rag/history_documents/message_history_new.txt"):
+    """Save message history to a file."""
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(messages, f, indent=4, ensure_ascii=False)
+
+
 # Initialize messages with few-shot examples
 def initialize_messages(system_message):
     messages = [
@@ -198,6 +203,10 @@ def main():
         print("Sending prompt to LLM")
         feedback = chat(messages)
         messages.append(feedback)
+
+        # Save message history to file
+        save_message_history(messages)
+
 
         # Check if the response contains valid JSON object
         try:
