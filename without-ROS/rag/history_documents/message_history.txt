@@ -1,0 +1,82 @@
+[
+    {
+        "time_step": "1",
+        "role": "user",
+        "content": "I want a power drill."
+    },
+    {
+        "time_step": "1",
+        "role": "assistant",
+        "content": "There is a power drill available in the current list of objects. I will hand it over to you. {\"object\": \"035_power_drill\", \"task\": \"handover\"}."
+    },
+    {
+        "time_step": "2",
+        "role": "user",
+        "content": "I need some balls on the shelf."
+    },
+    {
+        "time_step": "2",
+        "role": "assistant",
+        "content": "There are different balls available in the current list of objects: mini soccer ball, softball, baseball, tennis ball, racquetball, golf ball. What balls would you like?"
+    },
+    {
+        "time_step": "3",
+        "role": "user",
+        "content": "tennis ball and golf ball"
+    },
+    {
+        "time_step": "3",
+        "role": "assistant",
+        "content": "There is a tennis ball and a golf ball available in the current list of objects. I will place them on the shelf for you. {\"objects\": [\"056_tennis_ball\", \"058_golf_ball\"], \"task\": \"placement\"}."
+    },
+    {
+        "time_step": "4",
+        "role": "user",
+        "content": "Can i have a banana?"
+    },
+    {
+        "time_step": "4",
+        "role": "assistant",
+        "content": "There is a banana available in the current list of objects. I will hand it over to you. {\"object\": \"011_banana\", \"task\": \"handover\"}"
+    },
+    {
+        "time_step": "5",
+        "role": "user",
+        "content": "Can you put cutlery on the table please?"
+    },
+    {
+        "time_step": "5",
+        "role": "assistant",
+        "content": "I can place the following items that are considered cutlery from the current list of objects: spoon and knife.\n\n{\n  \"objects\": [\"031_spoon\", \"032_knife\"],\n  \"task\": \"placement\"\n}"
+    },
+    {
+        "time_step": "6",
+        "role": "user",
+        "content": "Can i have an apple?"
+    },
+    {
+        "time_step": "6",
+        "role": "assistant",
+        "content": "There is an apple available in the current list of objects. I will hand it over to you. {\"object\": \"012_apple\", \"task\": \"handover\"}"
+    },
+    {
+        "time_step": "7",
+        "role": "user",
+        "content": "Can you put cutlery into the sink please?"
+    },
+    {
+        "time_step": "7",
+        "role": "assistant",
+        "content": "I can place the following items that are considered cutlery from the current list of objects: spoon and knife.\n\n{\n  \"objects\": [\"031_spoon\", \"032_knife\"],\n  \"task\": \"placement\"\n}"
+    },
+    {
+        "time_step": "8",
+        "role": "user",
+        "content": "Can you put cutlery into the bin please?"
+    },
+    {
+        "time_step": "8",
+        "role": "assistant",
+        "content": "I can place the following items that are considered cutlery from the current list of objects: spoon and knife.\n\n{\n  \"objects\": [\"031_spoon\", \"032_knife\"],\n  \"task\": \"placement\"\n}"
+    }
+]
