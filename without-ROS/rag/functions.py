@@ -5,6 +5,8 @@ import ollama
 def readtextfiles(path):
   text_contents = {}
   directory = os.path.join(path)
+  file_directory = os.path.dirname(os.path.abspath(__file__))
+  os.chdir(file_directory)
 
   for filename in os.listdir(directory):
     if filename.endswith(".txt"):
@@ -13,7 +15,8 @@ def readtextfiles(path):
       with open(file_path, "r", encoding="utf-8") as file:
         content = file.read()
 
-      text_contents[filename] = content
+      if(content) != "":
+        text_contents[filename] = content
 
   return text_contents
 
@@ -53,7 +56,6 @@ def chunksplitter_conversation_pairs(text):
         if len(current_chunk) == 2:
             chunks.append(' '.join(current_chunk))
             current_chunk = []
-
     return chunks
     
 

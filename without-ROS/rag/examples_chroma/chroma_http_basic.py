@@ -9,7 +9,8 @@ for collection_name in collections:
     chromaclient.delete_collection("buildragwithpython")
 
 collection = chromaclient.get_or_create_collection(name="buildragwithpython", metadata={"hnsw:space": "cosine"})
-
+model = collection.get_model()
+print(model)
 
 collection.add(
     documents=[
