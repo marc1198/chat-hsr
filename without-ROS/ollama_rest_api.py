@@ -128,11 +128,43 @@ def get_object_history(object_name: str) -> list:
   return ["No history available."]
 
 
-def save_message_history(messages, file_path="/home/glockerm/sd_upscale/ollama/scripts/my_agents/rag/history_documents/message_history_new.txt"):
+def save_message_history(messages, file_path=f"{folder}/rag/history_documents/message_history_new.txt"):
     """Save message history to a file."""
+    messages_with_time_steps = add_time_steps(messages)  # Add time steps to message structure --> {time_step: "", user: "", assistent: ""}
     with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(messages, f, indent=4, ensure_ascii=False)
+        json.dump(messages_with_time_steps, f, indent=4, ensure_ascii=False)
 
+
+def add_time_steps(messages):
+    """Adds time steps to the message history, ignoring system messages."""
+    new_messages = []
+    time_step = 1
+    user_message = None  # Initialize to None
+
+    for message in messages:
+        if message.get("role") == "system":  # Ignore system messages
+            continue
+
+        if message.get("role") == "user":
+            user_message = message  # Store user message for pairing
+        elif message.get("role") == "assistant" and user_message:  # Pair with previous user message
+            new_messages.append({
+                "time_step": str(time_step),
+                "role": user_message["role"],
+                "content": user_message["content"]
+            })
+            new_messages.append({
+                "time_step": str(time_step),
+                "role": message["role"],
+                "content": message["content"]
+            })
+            time_step += 1
+            user_message = None # Reset user_message after pairing
+        elif message.get("role") == "assistant" and not user_message: #Handle the case where an assistant message comes before a user one.
+            #Logically, this should not happen, but if it does, it will be ignored to keep the time_step logic consistent.
+            pass #Do nothing
+
+    return new_messages
 
 # Initialize messages with few-shot examples
 def initialize_messages(system_message):
