@@ -19,35 +19,6 @@ object_detector = ObjectDetection()
 data= f'{folder}/system_message.txt'
 with open(data, 'r', encoding='utf-8') as data_message:
     system_message = data_message.read()
-
-
-def get_removed_objects(feedback, object_remove):
-    """Parses LLM response and updates the list of removed objects"""
-    try:
-        results = llm_answer_extractor.extract_json(feedback["content"])
-        if results:
-            
-            # Check the structure of the JSON response
-            if isinstance(results, dict) and ('object' in results or 'objects' in results) and 'task' in results:
-                # Process and print results
-                object_names = results.get("object", results.get("objects"))
-                if isinstance(object_names, str):
-                    object_names = [object_names]
-                for obj in object_names:
-                    if obj not in object_remove:
-                        object_remove.append(obj)
-                
-                task = results["task"]
-                print(f"\n\n{object_names = }, {task = }\n")
-                
-            else:
-                print("Invalid structure in the JSON response. Continuing conversation.")
-
-        return object_remove
-
-    except json.JSONDecodeError:
-        print("Error decoding JSON. Please try again.")
-        return object_remove
     
 
 def run_chat_loop():
@@ -86,7 +57,7 @@ def run_chat_loop():
         history_handler.save_history(messages)
 
         # Update removed objects      
-        object_remove = get_removed_objects(feedback, object_remove)
+        object_remove = llm_answer_extractor.get_removed_objects(feedback, object_remove)
         objects = object_detector.detect_objects(object_remove)
         print(f'object remove: {object_remove}')
         print(f'objects: {objects} \n')

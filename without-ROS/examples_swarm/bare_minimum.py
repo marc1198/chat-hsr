@@ -6,7 +6,6 @@ ollama_client=OpenAI(
         api_key="ollama"
 )
 
-
 client = Swarm(client=ollama_client)
 
 agent = Agent(
