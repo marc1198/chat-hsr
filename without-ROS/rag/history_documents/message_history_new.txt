@@ -2,11 +2,41 @@
     {
         "time_step": "1",
         "role": "user",
-        "content": "send an email to my best friend peter. choose the content yourself"
+        "content": "I want a power drill."
     },
     {
         "time_step": "1",
         "role": "assistant",
-        "content": "I will draft an email for you to send to your best friend Peter. Here's a suggested message:\n\nSubject: Hey Pete! How have you been?\n\nHi Peter,\n\nIt has been a while since we talked last time, hope everything is going well with you.\n\nHow are things? Are there any exciting plans coming up?\n\nI'm doing pretty fine as usual, and I can still remember that time when we were hanging out together...\n\nLooking forward to your reply!\n\nBest,\n[Your Name]\n\nFeel free to edit it or add more personalized contents before sending. Would you like me to proceed with this draft? If so, please give permission for me (Task Planning Agent) to send the email on your behalf.\n\nIf you need adjustments or wish to write an entirely different message, let me know what changes should be made!"
+        "content": "There is a power drill available in the current list of objects. I will hand it over to you. {\"object\": \"035_power_drill\", \"task\": \"handover\"}."
+    },
+    {
+        "time_step": "2",
+        "role": "user",
+        "content": "I need some balls on the shelf."
+    },
+    {
+        "time_step": "2",
+        "role": "assistant",
+        "content": "There are different balls available in the current list of objects: mini soccer ball, softball, baseball, tennis ball, racquetball, golf ball. What balls would you like?"
+    },
+    {
+        "time_step": "3",
+        "role": "user",
+        "content": "tennis ball and golf ball"
+    },
+    {
+        "time_step": "3",
+        "role": "assistant",
+        "content": "There is a tennis ball and a golf ball available in the current list of objects. I will place them on the shelf for you. {\"objects\": [\"056_tennis_ball\", \"058_golf_ball\"], \"task\": \"placement\"}."
+    },
+    {
+        "time_step": "4",
+        "role": "user",
+        "content": "This is the new list of detected objects, it overwrites all previous lists of objects: ['001_plant', '002_table', '003_plate', '004_fruit', '005_laptop_computer', '006_plastic_wrapper', '007_mug', '008_mouse', '009_computer', '010_candy_wrapper', '011_packaging_booklet', '012_pepper']. Here is my request: can i have a mug?"
+    },
+    {
+        "time_step": "4",
+        "role": "assistant",
+        "content": "There is a mug available in the current list of objects. I will hand it over to you. {\"object\": \"007_mug\", \"task\": \"handover\"}."
     }
 ]

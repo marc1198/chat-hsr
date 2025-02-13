@@ -1,9 +1,0 @@
-"001_table",
-"002_plate",
-"003_cutlery",
-"004_glass_mug",
-"005_spatula",
-"006_pan",
-"007_candy_wrapper",
-"008_salt_shaker",
-"009_pepper_shaker"

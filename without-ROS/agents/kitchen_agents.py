@@ -65,7 +65,7 @@ def get_current_objects(**kwargs):
 routing_agent = Agent(
     name="Routing Agent",
     instructions="Determine which agent is best suited to handle the user's request, and transfer the conversation to that agent.",
-    model="llama3.2:3b"
+    model="qwen2.5:32b"
 )
 
 
@@ -73,14 +73,14 @@ task_planning_agent = Agent(
     name="Task Planning Agent",
     instuctions = "Check if you find the object in the list. If not, try to find truly similar objects to the user that he could use for the desired context. When finished, return to routing_agent",
     functions=[get_current_objects],
-    model="llama3.2:3b"
+    model="qwen2.5:32b"
 )
 
 knowledge_base_agent = Agent(
     name="Knowledge Base Agent",
     instructions="Retrieve the chat history of a given object to find out where the object is now. This agent is helpful when a user asked where a certain object is or where it was put. It is also helpful when a user wants to write an email.",
     functions=[retrieve_history, send_email],
-    model="llama3.2:3b"
+    model="qwen2.5:32b"
 )
 
 def transfer_back_to_router(**kwargs): # Hier will ich eigentlich, dass der Agent wieder an den Routing Agent antwortet und der dann die Antwort an den Benutzer zusammenfasst. Aber vlt. auch unnötig kompliziert.
