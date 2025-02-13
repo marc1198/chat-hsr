@@ -2,7 +2,7 @@ import sys, chromadb, ollama
 import requests, json
 
 ollama_ip = "localhost"
-model = 'qwen2.5:14b'  # TODO: update this for the model you wish to use
+model = 'qwen2.5:32b'  # TODO: update this for the model you wish to use
 
 #API chat completion call
 def chat(messages, stream = True):
@@ -51,7 +51,7 @@ query = " ".join(sys.argv[1:])
 queryembed = ollama.embed(model="nomic-embed-text", input=query)['embeddings']
 
 # 3. Get related documents from query embedding
-query_results = collection.query(query_embeddings=queryembed, n_results=5)
+query_results = collection.query(query_embeddings=queryembed, n_results=100)
 if query_results['documents']:  # Überprüfen, ob Ergebnisse vorhanden sind
     relateddocs = '\n\n'.join(query_results['documents'][0])
 else:

@@ -41,6 +41,22 @@ class HistoryHandler:
         """
         
         return messages
+    
+    def initialize_messages_swarm(self, system_message):
+        """Initialize messages with few-shot examples (without system prompt for usage with swarm)"""
+        messages = [            
+            # Few-shot example 1
+            {"role": "user", "content": "I want a power drill."},
+            {"role": "assistant", "content": "There is a power drill available in the current list of objects. I will hand it over to you. {\"object\": \"035_power_drill\", \"task\": \"handover\"}."},
+            
+            # Few-shot example 2
+            {"role": "user", "content": "I need some balls on the shelf."},
+            {"role": "assistant", "content": "There are different balls available in the current list of objects: mini soccer ball, softball, baseball, tennis ball, racquetball, golf ball. What balls would you like?"},
+            {"role": "user", "content": "tennis ball and golf ball"},
+            {"role": "assistant", "content": "There is a tennis ball and a golf ball available in the current list of objects. I will place them on the shelf for you. {\"objects\": [\"056_tennis_ball\", \"058_golf_ball\"], \"task\": \"placement\"}."}
+        ]
+        
+        return messages
 
     def save_history(self, messages):
         """Save message history to a file."""

@@ -2,7 +2,7 @@ import chromadb
 from functions import readtextfiles, chunksplitter, chunksplitter_conversation_pairs, getembedding
 
 chromaclient = chromadb.HttpClient(host="chromadb", port=8000)
-textdocspath = "./history_documents"
+textdocspath = "./history_documents/evaluation"
 text_data = readtextfiles(textdocspath)
 
 collections = chromaclient.list_collections()
