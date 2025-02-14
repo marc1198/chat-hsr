@@ -51,7 +51,7 @@ query = " ".join(sys.argv[1:])
 queryembed = ollama.embed(model="nomic-embed-text", input=query)['embeddings']
 
 # 3. Get related documents from query embedding
-query_results = collection.query(query_embeddings=queryembed, n_results=100)
+query_results = collection.query(query_embeddings=queryembed, n_results=5)
 if query_results['documents']:  # Überprüfen, ob Ergebnisse vorhanden sind
     relateddocs = '\n\n'.join(query_results['documents'][0])
 else:
