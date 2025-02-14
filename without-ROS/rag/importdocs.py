@@ -8,7 +8,7 @@ text_data = readtextfiles(textdocspath)
 collections = chromaclient.list_collections()
 for collection_name in collections:
   if collection_name == "buildragwithpython":
-    print("Collection already existed")    
+    print("Collection already existed. Overwriting the content.")    
     chromaclient.delete_collection("buildragwithpython")
 
 collection = chromaclient.get_or_create_collection(name="buildragwithpython", metadata={"hnsw:space": "cosine"}  )
