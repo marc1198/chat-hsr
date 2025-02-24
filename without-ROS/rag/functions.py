@@ -1,6 +1,11 @@
 import os
 import re
 import ollama
+import json
+from sentence_transformers import SentenceTransformer
+import torch 
+import ast
+
 
 def readtextfiles(path):
   text_contents = {}
@@ -42,23 +47,82 @@ def chunksplitter(text, chunk_size=100):
   return chunks
 
 def chunksplitter_conversation_pairs(text):
-    #pattern = r'(\{\s*"role":\s*"(?:user|assistant)".*?\})' # Regex for txt file without time_step (only "user": "", "assistant": "")
-    pattern = r'(\{\s*"time_step":\s*"\d+"\s*,\s*"role":\s*"(?:user|assistant)".*?\})' # Regex for txt file including time_step
-    matches = re.findall(pattern, text, re.DOTALL)
-    
+  data = json.loads(text) # Parse JSON
+  chunks = []
+  current_chunk = []
+
+  for entry in data:
+    if entry["role"] == "user":
+      # Start a new chunk with user input
+      current_chunk = [entry]
+    elif entry["role"] == "assistant" and current_chunk:
+      # Pair the assistant response with the user input
+      current_chunk.append(entry)
+      chunks.append(json.dumps(current_chunk, indent=2)) # Store as JSON string
+      current_chunk = [] # Reset for next pair
+
+  return chunks
+
+def chunksplitter_conversation_pairs_without_brackets(text):
+    data = json.loads(text)  # Parse JSON
+    chunks_brackets = []
+    chunks_no_brackets = []
+    current_chunk = []
+
+    for entry in data:
+        if entry["role"] == "user":
+            # Start a new chunk with user input
+            current_chunk = [entry]
+        elif entry["role"] == "assistant" and current_chunk:
+            # Pair the assistant response with the user input
+            current_chunk.append(entry)
+
+            # Create chunk with brackets (like original function)
+            chunks_brackets.append(json.dumps(current_chunk, indent=2))
+
+            # Create chunk without brackets (like _without_brackets function)
+            chunk_string_no_bracket = ""
+            for item in current_chunk:
+                chunk_string_no_bracket += json.dumps(item, indent=2) + " "
+            chunks_no_brackets.append(chunk_string_no_bracket.strip())
+
+            current_chunk = []  # Reset for next pair
+
+    return chunks_brackets, chunks_no_brackets
+
+
+"""def chunksplitter_conversation_pairs(text):
+    data = json.loads(text)  # Parse JSON
     chunks = []
     current_chunk = []
 
-    for match in matches:
-        current_chunk.append(match)
+    for entry in data:
+        if entry["role"] == "user":
+            # Start a new chunk with user input
+            current_chunk = [entry]
+        elif entry["role"] == "assistant" and current_chunk:
+            # Pair the assistant response with the user input
+            current_chunk.append(entry)
+            chunks.append(json.dumps(current_chunk, indent=2))  # Store as JSON string
+            current_chunk = []  # Reset for next pair
 
-        # Falls das aktuelle Chunk eine User- und eine Assistant-Nachricht enthält, speichern wir es
-        if len(current_chunk) == 2:
-            chunks.append(' '.join(current_chunk))
-            current_chunk = []
-    return chunks
-    
+    return chunks"""
 
-def getembedding(chunks):
-  embeds = ollama.embed(model="nomic-embed-text", input=chunks)
-  return embeds.get('embeddings', [])
+
+def getembedding(input):
+
+  # Using Ollama Embedding (nomic)
+  #embed = ollama.embed(model="mxbai-embed-large:latest", input=input)['embeddings']
+  # 'nomic-embed-text' - alternative model (but probably worse)
+
+  # Using Sentence Transformers
+  embed_model = SentenceTransformer("BAAI/bge-m3", trust_remote_code=True)
+  embed = embed_model.encode(input)
+
+  # Other available SoTa Sentence Transformers Models: 
+  # 'BAAI/bge-m3' - precise and fast
+  # 'Alibaba-NLP/gte-Qwen2-1.5B-instruct' - precise but slow
+  # 'Snowflake/snowflake-arctic-embed-l-v2.0' - alternative model (but probably worse)
+
+
+  return embed
