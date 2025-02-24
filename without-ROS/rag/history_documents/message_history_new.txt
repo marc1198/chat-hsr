@@ -32,11 +32,21 @@
     {
         "time_step": "4",
         "role": "user",
-        "content": "This is the new list of detected objects, it overwrites all previous lists of objects: ['001_plant', '002_table', '003_plate', '004_fruit', '005_laptop_computer', '006_plastic_wrapper', '007_mug', '008_mouse', '009_computer', '010_candy_wrapper', '011_packaging_booklet', '012_pepper']. Here is my request: can i have a mug?"
+        "content": "This is the new list of detected objects, it overwrites all previous lists of objects: ['001_table', '002_picture_frame', '003_orange_peel', '004_chair', '005_mug', '006_toothpick', '007_apple', '008_charger', '009_milk', '010_bread', '011_backpack', '012_flowers']. Here is my request: Please tidy up the workspace, but leave any personal decorative items."
     },
     {
         "time_step": "4",
         "role": "assistant",
-        "content": "There is a mug available in the current list of objects. I will hand it over to you. {\"object\": \"007_mug\", \"task\": \"handover\"}."
+        "content": "Based on your request, I will remove the relevant objects from the workspace while leaving personal decorative items, such as the picture frame and flowers, untouched. Here's how I'll categorize and handle the objects:\n\n- Place the mug in the Sink.\n- Place the orange peel and the toothpick in the Trash Can.\n- Place the apple and bread on the Food Shelf.\n- Place the milk in the Fridge.\n- Place the charger and backpack in the Storage Box.\n- No action for the table, picture frame, chair, and flowers.\n\nHere is the JSON output for each task:\n\n{\n  \"objects\": [\"005_mug\"],\n  \"task\": \"placement\",\n  \"location\": \"Sink\"\n}\n\n{\n  \"objects\": [\"003_orange_peel\", \"006_toothpick\"],\n  \"task\": \"placement\",\n  \"location\": \"Trash Can\"\n}\n\n{\n  \"objects\": [\"007_apple\", \"010_bread\"],\n  \"task\": \"placement\",\n  \"location\": \"Food Shelf\"\n}\n\n{\n  \"objects\": [\"009_milk\"],\n  \"task\": \"placement\",\n  \"location\": \"Fridge\"\n}\n\n{\n  \"objects\": [\"008_charger\", \"011_backpack\"],\n  \"task\": \"placement\",\n  \"location\": \"Storage Box\"\n}"
+    },
+    {
+        "time_step": "5",
+        "role": "user",
+        "content": "This is the new list of detected objects, it overwrites all previous lists of objects: ['001_plant', '002_table', '003_plate', '004_fruit', '005_laptop_computer', '006_plastic_wrapper', '007_mug', '008_mouse', '009_computer', '010_candy_wrapper', '011_packaging_booklet', '012_pepper']. Here is my request: Please clear the table"
+    },
+    {
+        "time_step": "5",
+        "role": "assistant",
+        "content": "To clear the table, I will remove or dispose of any unnecessary items on it. Here's what I'll do:\n\n- Place the plastic wrapper and candy wrapper in the Trash Can.\n- Place the pepper in the Storage Box as it might be used later.\n- Move the laptop computer to the Food Shelf, assuming it's not being used immediately.\n\nHere is the JSON output for each task:\n\n{\n  \"objects\": [\"006_plastic_wrapper\", \"010_candy_wrapper\"],\n  \"task\": \"placement\",\n  \"location\": \"Trash Can\"\n}\n\n{\n  \"objects\": [\"012_pepper\"],\n  \"task\": \"placement\",\n  \"location\": \"Storage Box\"\n}\n\n{\n  \"objects\": [\"005_laptop_computer\"],\n  \"task\": \"placement\",\n  \"location\": \"Food Shelf\"\n}"
     }
 ]
