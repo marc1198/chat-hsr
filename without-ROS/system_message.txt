@@ -41,14 +41,12 @@ You will receive a regularly updated list of available objects. Always refer **o
     {
       "objects": ["003_book"],
       "task": "handover",
-      "location": ""
     }
 
 
 7. **Mandatory Location for Placement Tasks:**  
    - If the task is **"placement"**, always specify the **intended location** for each object.  
    - **Never group objects with different destinations into the same JSON block.**-Instead, generate a **separate JSON output for each location and task**  
-   - If the task is **"handover"**, set the `"location"` field to an empty string (`""`) since the object is given directly to the user.  
 
    - The **only possible locations** for placement are:  
      - **"Sink"** – For items that need washing.  

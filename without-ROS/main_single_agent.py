@@ -7,7 +7,7 @@ import pathlib
 folder = pathlib.Path(__file__).parent.resolve()
 # NOTE: ollama must be running for this to work, start the ollama docker container and pull the LLM used
 ollama_ip = "localhost"
-model = 'llama3.1:latest'  # TODO: update this for the model you wish to use
+model = 'llama3.1'  # TODO: update this for the model you wish to use
 # Best: qwen2.5:32b & gemma2:27b
 # Old but good: llama3.1:latest
 
@@ -18,29 +18,9 @@ data= f'{folder}/system_message.txt'
 with open(data, 'r', encoding='utf-8') as data_message:
     system_message = data_message.read()
 
-ollama_ip = "localhost"
 
 # Dictionary to save history of all objects that were handled by the robot
 object_history = {}
-tools = [
-  {
-    "type": "function",
-    "function": {
-      "name": "get_object_history",  # Replace with the actual function name
-      "description": "Retrieves the task history of a given object to find out where the object is now.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "object_name": {
-            "type": "string",
-            "description": "The name of the object to retrieve history for."
-          }
-        },
-        "required": ["object_name"]
-      }
-    }
-  }
-]
 
 #API chat completion call
 def chat(messages, stream = True):
@@ -112,23 +92,6 @@ def update_object_history(object_name, task):
   else:
     object_history[object_name] = [task] 
 
-### LLM Tool Functions ### 
-def get_object_history(object_name: str) -> list:
-  """
-  Retrieves the task history of a given object to find out where the object is now.
-
-  Args:
-    object_name: The name of the object to retrieve history for.
-
-  Returns:
-    list: A list containing the history of the object. 
-          Returns ["No history available."] if no task was applied to this object before.
-  """
-  for key in object_history:
-    if object_name in key:
-      return object_history[key]
-  return ["No history available."]
-
 
 def save_message_history(messages, file_path=f"{folder}/rag/history_documents/message_history_new.txt"):
     """Save message history to a file."""
@@ -173,16 +136,21 @@ def initialize_messages(system_message):
     messages = [
         {"role": "system", "content": system_message},
         
-        # Few-shot example 1
+        # Few-shot example 1 (low-level)
         {"role": "user", "content": "I want a power drill."},
         {"role": "assistant", "content": "There is a power drill available in the current list of objects. I will hand it over to you. {\"object\": \"035_power_drill\", \"task\": \"handover\"}."},
         
-        # Few-shot example 2
+        # Few-shot example 2 (low-level)
         {"role": "user", "content": "I need some balls on the shelf."},
         {"role": "assistant", "content": "There are different balls available in the current list of objects: mini soccer ball, softball, baseball, tennis ball, racquetball, golf ball. What balls would you like?"},
         {"role": "user", "content": "tennis ball and golf ball"},
-        {"role": "assistant", "content": "There is a tennis ball and a golf ball available in the current list of objects. I will place them on the shelf for you. {\"objects\": [\"056_tennis_ball\", \"058_golf_ball\"], \"task\": \"placement\"}."}
+        {"role": "assistant", "content": "There is a tennis ball and a golf ball available in the current list of objects. I will place them on the shelf for you. {\"objects\": [\"056_tennis_ball\", \"058_golf_ball\"], \"task\": \"placement\"}."},
+
+        # Few-shot example 3 (high-level)
+        {"role": "user", "content": "This is the new list of detected objects, it overwrites all previous lists of objects: ['001_table', '002_picture_frame', '003_orange_peel', '004_chair', '005_mug', '006_toothpick', '007_apple', '008_charger', '009_milk', '010_bread', '011_backpack', '012_flowers']. Here is my request: Please tidy up the workspace, but leave any personal decorative items."},
+        {"role": "assistant", "content": "Based on your request, I will remove the relevant objects from the workspace while leaving personal decorative items, such as the picture frame and flowers, untouched. Here's how I'll categorize and handle the objects:\n\n- Place the mug in the Sink.\n- Place the orange peel and the toothpick in the Trash Can.\n- Place the apple and bread on the Food Shelf.\n- Place the milk in the Fridge.\n- Place the charger and backpack in the Storage Box.\n- No action for the table, picture frame, chair, and flowers.\n\nHere is the JSON output for each task:\n\n{\n  \"objects\": [\"005_mug\"],\n  \"task\": \"placement\",\n  \"location\": \"Sink\"\n}\n\n{\n  \"objects\": [\"003_orange_peel\", \"006_toothpick\"],\n  \"task\": \"placement\",\n  \"location\": \"Trash Can\"\n}\n\n{\n  \"objects\": [\"007_apple\", \"010_bread\"],\n  \"task\": \"placement\",\n  \"location\": \"Food Shelf\"\n}\n\n{\n  \"objects\": [\"009_milk\"],\n  \"task\": \"placement\",\n  \"location\": \"Fridge\"\n}\n\n{\n  \"objects\": [\"008_charger\", \"011_backpack\"],\n  \"task\": \"placement\",\n  \"location\": \"Storage Box\"\n}"}
     ]
+
     return messages
 
 def main():
