@@ -1,7 +1,3 @@
-<div align="center">
-![alt text](IDRA-H_System.jpg "System overview")
-</div>
-
 # IDRA-H
 
 Intelligent Dialogue for Robot Applications with Humans: a system pipeline for intutitive dialogue between a user and a robot through the invovlement of LLMs.
