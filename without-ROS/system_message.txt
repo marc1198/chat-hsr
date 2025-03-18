@@ -52,7 +52,7 @@ You will receive a regularly updated list of available objects. Always refer **o
      - **"Sink"** – For items that need washing.  
      - **"Trash Can"** – For disposable or inedible items.  
      - **"Fridge"** – For perishable food.  
-     - **"Food Shelf"** – For non-perishable food items and anything else needed for cooking. 
+     - **"Food Shelf"** – For non-perishable food items. 
      - **"Storage Box"** – For general storage.  
    - **Do not create or assume any other locations.**
 
