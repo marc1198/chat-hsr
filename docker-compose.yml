@@ -1,0 +1,54 @@
+version: '2.2'
+services:
+  ollama:
+    container_name: ollama_${UID}
+    #expecting NVIDIA_VISIBLE_DEVICES=0 and UID=1000 MAX_CPU_ID=29 lines
+    env_file: .env
+    #user: ${UID}:${UID}
+    environment:
+      - DISPLAY=${DISPLAY}
+    build:
+       context: ./
+       args:
+         UID: ${UID}
+
+    shm_size: '8gb'
+    cpuset: '${MIN_CPU_ID}-${MAX_CPU_ID}'
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          device_ids: ["1","2","3"]
+    #          capabilities: [gpu]
+    ports:
+      - "11434:11434"
+    image: ollama/ollama:custom
+    volumes:
+      # this is the local directory
+      - ./:/workspace/local
+      - ../../test:/workspace/test_ollama
+      #needed for x-window-forwarding
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      # keep torch/huggingface temp files from re-downloading every time
+      #- ./torch_tmp:/root/.cache/
+      # keep ollama models from re-downloading every time
+      - ./models:/root/.ollama/models
+      # connection to local model repo
+      #- /projects/rvc/stable-diffusion:/workspace/models_ro:ro
+      # connection to raisa dataset
+      - /projects/rvc/raisa:/workspace/dataset_raisa_ro:ro
+
+  chromadb:
+      container_name: chroma_vector_database
+      image: chromadb/chroma
+      ports:
+        - "8000:8000"
+      volumes:
+        - chroma-data:/chromadata
+      environment:
+        - ALLOW_RESET=true
+
+volumes:
+  chroma-data:
+
