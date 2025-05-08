@@ -2,8 +2,12 @@
 LLM-Empowered Embodied Agent for Memory-Augmented Task Planning in Household Robotics (April, 2025)  
 🔗 [arXiv Paper](https://arxiv.org/abs/2504.21716)  
 
+![Alt text](images/introduction_image.png)
+
 # IDRA-H
 Intelligent Dialogue for Robot Applications with Humans: a system pipeline for intutitive dialogue between a user and a robot through the invovlement of LLMs.
+  
+![Alt text](images/full_pipeline.png)
 
 ## How to run on Toyota HSR (with-ROS)
 
