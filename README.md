@@ -1,5 +1,5 @@
 # IDRA-H
-
+🔗 [arXiv Paper](https://arxiv.org/abs/2504.21716)  
 Intelligent Dialogue for Robot Applications with Humans: a system pipeline for intutitive dialogue between a user and a robot through the invovlement of LLMs.
 
 ## How to run on Toyota HSR (with-ROS)
